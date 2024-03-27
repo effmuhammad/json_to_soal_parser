@@ -9,7 +9,12 @@ Example json:
         "jawaban": "a",
         "pembahasan": [
             "a adalah jawaban yang benar",
-            "pembahasan line 2",
+            "pembahasan line 2"
+        ],
+        "pertanyaan": [
+            "soal line 1", 
+            "soal line 2", 
+            "soal line 3"
         ],
         "pilihan": {
             "a": [
@@ -28,18 +33,18 @@ Example json:
                 "pilihan d line 1",
                 "pilihan d line 2"
             ]
-        },
-        "soal": [
-            "soal line 1", 
-            "soal line 2", 
-            "soal line 3"
-        ]
+        }
     },
     {
         "jawaban": "b",
         "pembahasan": [
             "b adalah jawaban yang benar"
         ],
+        "pertanyaan": [
+            "soal line 1", 
+            "soal line 2", 
+            "soal line 3"
+        ],
         "pilihan": {
             "a": [
                 "pilihan a line 1",
@@ -57,12 +62,7 @@ Example json:
                 "pilihan d line 1",
                 "pilihan d line 2"
             ]
-        },
-        "soal": [
-            "soal line 1", 
-            "soal line 2", 
-            "soal line 3"
-        ]
+        }
     }
 ]
 ```

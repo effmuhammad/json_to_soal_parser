@@ -10,7 +10,7 @@ class SoalModel with _$SoalModel {
     required String jawaban,
     required List<String> pembahasan,
     required Map<String, List<String>> pilihan,
-    required List<String> soal,
+    required List<String> pertanyaan,
   }) = _SoalModel;
 
   factory SoalModel.fromJson(Map<String, Object?> json) =>

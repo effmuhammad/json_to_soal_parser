@@ -16,7 +16,9 @@ _$SoalModelImpl _$$SoalModelImplFromJson(Map<String, dynamic> json) =>
         (k, e) =>
             MapEntry(k, (e as List<dynamic>).map((e) => e as String).toList()),
       ),
-      soal: (json['soal'] as List<dynamic>).map((e) => e as String).toList(),
+      pertanyaan: (json['pertanyaan'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
     );
 
 Map<String, dynamic> _$$SoalModelImplToJson(_$SoalModelImpl instance) =>
@@ -24,5 +26,5 @@ Map<String, dynamic> _$$SoalModelImplToJson(_$SoalModelImpl instance) =>
       'jawaban': instance.jawaban,
       'pembahasan': instance.pembahasan,
       'pilihan': instance.pilihan,
-      'soal': instance.soal,
+      'pertanyaan': instance.pertanyaan,
     };

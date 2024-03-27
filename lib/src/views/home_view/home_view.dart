@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:json_text_field/json_text_field.dart';
 import 'package:json_to_soal_parser/src/models/soal_model/soal_model.dart';
+import 'package:json_to_soal_parser/src/viewmodel/soal_viewmodel.dart';
 import 'package:json_to_soal_parser/src/views/widgets/soal_widget/soal_widget.dart';
 
 class HomeView extends StatefulWidget {
@@ -23,6 +24,14 @@ class _HomeViewState extends State<HomeView> {
           style: TextStyle(color: Colors.grey));
     }
     try {
+      var jsonObject = jsonDecode(jsonString);
+      if (jsonObject is List) {
+        final soalList = SoalViewModel.fromJsonList(
+            jsonObject as List<Map<String, Object?>>);
+        return Column(
+          children: soalList.map((e) => SoalWidget(soal: e)).toList(),
+        );
+      }
       final soal = SoalModel.fromJson(jsonDecode(jsonString));
       return SoalWidget(soal: soal);
     } catch (e) {
@@ -37,7 +46,7 @@ class _HomeViewState extends State<HomeView> {
 
   Widget get jsonInput => JsonTextField(
         onError: (error) => debugPrint(error),
-        showErrorMessage: true,
+        showErrorMessage: false,
         controller: controller,
         isFormatting: isFormating,
         keyboardType: TextInputType.multiline,

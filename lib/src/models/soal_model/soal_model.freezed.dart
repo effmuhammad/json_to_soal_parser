@@ -23,7 +23,7 @@ mixin _$SoalModel {
   String get jawaban => throw _privateConstructorUsedError;
   List<String> get pembahasan => throw _privateConstructorUsedError;
   Map<String, List<String>> get pilihan => throw _privateConstructorUsedError;
-  List<String> get soal => throw _privateConstructorUsedError;
+  List<String> get pertanyaan => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -40,7 +40,7 @@ abstract class $SoalModelCopyWith<$Res> {
       {String jawaban,
       List<String> pembahasan,
       Map<String, List<String>> pilihan,
-      List<String> soal});
+      List<String> pertanyaan});
 }
 
 /// @nodoc
@@ -59,7 +59,7 @@ class _$SoalModelCopyWithImpl<$Res, $Val extends SoalModel>
     Object? jawaban = null,
     Object? pembahasan = null,
     Object? pilihan = null,
-    Object? soal = null,
+    Object? pertanyaan = null,
   }) {
     return _then(_value.copyWith(
       jawaban: null == jawaban
@@ -74,9 +74,9 @@ class _$SoalModelCopyWithImpl<$Res, $Val extends SoalModel>
           ? _value.pilihan
           : pilihan // ignore: cast_nullable_to_non_nullable
               as Map<String, List<String>>,
-      soal: null == soal
-          ? _value.soal
-          : soal // ignore: cast_nullable_to_non_nullable
+      pertanyaan: null == pertanyaan
+          ? _value.pertanyaan
+          : pertanyaan // ignore: cast_nullable_to_non_nullable
               as List<String>,
     ) as $Val);
   }
@@ -94,7 +94,7 @@ abstract class _$$SoalModelImplCopyWith<$Res>
       {String jawaban,
       List<String> pembahasan,
       Map<String, List<String>> pilihan,
-      List<String> soal});
+      List<String> pertanyaan});
 }
 
 /// @nodoc
@@ -111,7 +111,7 @@ class __$$SoalModelImplCopyWithImpl<$Res>
     Object? jawaban = null,
     Object? pembahasan = null,
     Object? pilihan = null,
-    Object? soal = null,
+    Object? pertanyaan = null,
   }) {
     return _then(_$SoalModelImpl(
       jawaban: null == jawaban
@@ -126,9 +126,9 @@ class __$$SoalModelImplCopyWithImpl<$Res>
           ? _value._pilihan
           : pilihan // ignore: cast_nullable_to_non_nullable
               as Map<String, List<String>>,
-      soal: null == soal
-          ? _value._soal
-          : soal // ignore: cast_nullable_to_non_nullable
+      pertanyaan: null == pertanyaan
+          ? _value._pertanyaan
+          : pertanyaan // ignore: cast_nullable_to_non_nullable
               as List<String>,
     ));
   }
@@ -141,10 +141,10 @@ class _$SoalModelImpl implements _SoalModel {
       {required this.jawaban,
       required final List<String> pembahasan,
       required final Map<String, List<String>> pilihan,
-      required final List<String> soal})
+      required final List<String> pertanyaan})
       : _pembahasan = pembahasan,
         _pilihan = pilihan,
-        _soal = soal;
+        _pertanyaan = pertanyaan;
 
   factory _$SoalModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$SoalModelImplFromJson(json);
@@ -167,17 +167,17 @@ class _$SoalModelImpl implements _SoalModel {
     return EqualUnmodifiableMapView(_pilihan);
   }
 
-  final List<String> _soal;
+  final List<String> _pertanyaan;
   @override
-  List<String> get soal {
-    if (_soal is EqualUnmodifiableListView) return _soal;
+  List<String> get pertanyaan {
+    if (_pertanyaan is EqualUnmodifiableListView) return _pertanyaan;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_soal);
+    return EqualUnmodifiableListView(_pertanyaan);
   }
 
   @override
   String toString() {
-    return 'SoalModel(jawaban: $jawaban, pembahasan: $pembahasan, pilihan: $pilihan, soal: $soal)';
+    return 'SoalModel(jawaban: $jawaban, pembahasan: $pembahasan, pilihan: $pilihan, pertanyaan: $pertanyaan)';
   }
 
   @override
@@ -189,7 +189,8 @@ class _$SoalModelImpl implements _SoalModel {
             const DeepCollectionEquality()
                 .equals(other._pembahasan, _pembahasan) &&
             const DeepCollectionEquality().equals(other._pilihan, _pilihan) &&
-            const DeepCollectionEquality().equals(other._soal, _soal));
+            const DeepCollectionEquality()
+                .equals(other._pertanyaan, _pertanyaan));
   }
 
   @JsonKey(ignore: true)
@@ -199,7 +200,7 @@ class _$SoalModelImpl implements _SoalModel {
       jawaban,
       const DeepCollectionEquality().hash(_pembahasan),
       const DeepCollectionEquality().hash(_pilihan),
-      const DeepCollectionEquality().hash(_soal));
+      const DeepCollectionEquality().hash(_pertanyaan));
 
   @JsonKey(ignore: true)
   @override
@@ -220,7 +221,7 @@ abstract class _SoalModel implements SoalModel {
       {required final String jawaban,
       required final List<String> pembahasan,
       required final Map<String, List<String>> pilihan,
-      required final List<String> soal}) = _$SoalModelImpl;
+      required final List<String> pertanyaan}) = _$SoalModelImpl;
 
   factory _SoalModel.fromJson(Map<String, dynamic> json) =
       _$SoalModelImpl.fromJson;
@@ -232,7 +233,7 @@ abstract class _SoalModel implements SoalModel {
   @override
   Map<String, List<String>> get pilihan;
   @override
-  List<String> get soal;
+  List<String> get pertanyaan;
   @override
   @JsonKey(ignore: true)
   _$$SoalModelImplCopyWith<_$SoalModelImpl> get copyWith =>
