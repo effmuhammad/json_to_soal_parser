@@ -17,7 +17,10 @@ class _SoalWidgetState extends State<SoalWidget> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        widget.nomor != null ? Text(widget.nomor.toString()) : const SizedBox(),
+        widget.nomor != null
+            ? Text('${widget.nomor.toString()}.')
+            : const SizedBox(),
+        const SizedBox(width: 10),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -29,22 +32,38 @@ class _SoalWidgetState extends State<SoalWidget> {
               ),
             const SizedBox(height: 10),
             for (var i = 0; i < widget.soal.pilihan.length; i++)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Column(
                 children: [
-                  Text('${widget.soal.pilihan.keys.elementAt(i)}.'),
-                  const SizedBox(width: 5),
-                  Column(
+                  Row(
                     children: [
-                      for (var j = 0;
-                          j < widget.soal.pilihan.values.elementAt(i).length;
-                          j++)
-                        Text(widget.soal.pilihan.values.elementAt(i)[j]),
+                      Radio(value: 1, groupValue: 2, onChanged: (a) {}),
+                      const SizedBox(width: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('${widget.soal.pilihan.keys.elementAt(i)}.'),
+                          const SizedBox(width: 5),
+                          Column(
+                            children: [
+                              for (var j = 0;
+                                  j <
+                                      widget.soal.pilihan.values
+                                          .elementAt(i)
+                                          .length;
+                                  j++)
+                                Text(
+                                    widget.soal.pilihan.values.elementAt(i)[j]),
+                            ],
+                          ),
+                        ],
+                      ),
                     ],
                   ),
+                  const SizedBox(height: 10),
                 ],
               ),
+            const SizedBox(height: 20),
           ],
         ),
       ],

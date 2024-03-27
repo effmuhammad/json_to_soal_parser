@@ -26,10 +26,16 @@ class _HomeViewState extends State<HomeView> {
     try {
       var jsonObject = jsonDecode(jsonString);
       if (jsonObject is List) {
+        debugPrint('jsonObject is List');
         final soalList = SoalViewModel.fromJsonList(
-            jsonObject as List<Map<String, Object?>>);
+            jsonObject.map((e) => e as Map<String, dynamic>).toList());
         return Column(
-          children: soalList.map((e) => SoalWidget(soal: e)).toList(),
+          children: soalList.asMap().entries.map((e) {
+            int index = e.key;
+            SoalModel soal = e.value;
+            // Now you can use both index and soal
+            return SoalWidget(nomor: index + 1, soal: soal);
+          }).toList(),
         );
       }
       final soal = SoalModel.fromJson(jsonDecode(jsonString));
@@ -92,7 +98,14 @@ class _HomeViewState extends State<HomeView> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Json Parser'),
+              const Text(
+                'JSON to SOAL Parser',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const Text(
+                'Project bank soal untuk aplikasi mobile milik EffDev Studio',
+                style: TextStyle(fontSize: 14, color: Colors.grey),
+              ),
               const SizedBox(height: 20),
               Expanded(
                 child: Row(
@@ -148,7 +161,7 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ),
               const SizedBox(height: 20),
-              const Text('Trial Version 0.0.1'),
+              const Text('Copyright EffDev Studio, Version 0.0.1'),
             ],
           ),
         ),
