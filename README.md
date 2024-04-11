@@ -2,6 +2,15 @@
 
 A new Flutter project.
 
+<b>text</b>  :  Bold
+<u>text</u>  :  Underline
+<i>text</i>  :  Italic
+<s>text</s>  :  Strikethrough
+<img path_to_your_image.jpg>
+<img https://example.com/path_to_your_image.jpg>
+
+
+
 Example json:
 ```
 [

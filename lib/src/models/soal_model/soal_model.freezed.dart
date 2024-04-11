@@ -20,10 +20,10 @@ SoalModel _$SoalModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SoalModel {
-  String get jawaban => throw _privateConstructorUsedError;
-  List<String> get pembahasan => throw _privateConstructorUsedError;
-  Map<String, List<String>> get pilihan => throw _privateConstructorUsedError;
-  List<String> get pertanyaan => throw _privateConstructorUsedError;
+  String get answer => throw _privateConstructorUsedError;
+  List<String> get answerDetail => throw _privateConstructorUsedError;
+  Map<String, List<String>> get choices => throw _privateConstructorUsedError;
+  List<String> get question => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -37,10 +37,10 @@ abstract class $SoalModelCopyWith<$Res> {
       _$SoalModelCopyWithImpl<$Res, SoalModel>;
   @useResult
   $Res call(
-      {String jawaban,
-      List<String> pembahasan,
-      Map<String, List<String>> pilihan,
-      List<String> pertanyaan});
+      {String answer,
+      List<String> answerDetail,
+      Map<String, List<String>> choices,
+      List<String> question});
 }
 
 /// @nodoc
@@ -56,27 +56,27 @@ class _$SoalModelCopyWithImpl<$Res, $Val extends SoalModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? jawaban = null,
-    Object? pembahasan = null,
-    Object? pilihan = null,
-    Object? pertanyaan = null,
+    Object? answer = null,
+    Object? answerDetail = null,
+    Object? choices = null,
+    Object? question = null,
   }) {
     return _then(_value.copyWith(
-      jawaban: null == jawaban
-          ? _value.jawaban
-          : jawaban // ignore: cast_nullable_to_non_nullable
+      answer: null == answer
+          ? _value.answer
+          : answer // ignore: cast_nullable_to_non_nullable
               as String,
-      pembahasan: null == pembahasan
-          ? _value.pembahasan
-          : pembahasan // ignore: cast_nullable_to_non_nullable
+      answerDetail: null == answerDetail
+          ? _value.answerDetail
+          : answerDetail // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      pilihan: null == pilihan
-          ? _value.pilihan
-          : pilihan // ignore: cast_nullable_to_non_nullable
+      choices: null == choices
+          ? _value.choices
+          : choices // ignore: cast_nullable_to_non_nullable
               as Map<String, List<String>>,
-      pertanyaan: null == pertanyaan
-          ? _value.pertanyaan
-          : pertanyaan // ignore: cast_nullable_to_non_nullable
+      question: null == question
+          ? _value.question
+          : question // ignore: cast_nullable_to_non_nullable
               as List<String>,
     ) as $Val);
   }
@@ -91,10 +91,10 @@ abstract class _$$SoalModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String jawaban,
-      List<String> pembahasan,
-      Map<String, List<String>> pilihan,
-      List<String> pertanyaan});
+      {String answer,
+      List<String> answerDetail,
+      Map<String, List<String>> choices,
+      List<String> question});
 }
 
 /// @nodoc
@@ -108,27 +108,27 @@ class __$$SoalModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? jawaban = null,
-    Object? pembahasan = null,
-    Object? pilihan = null,
-    Object? pertanyaan = null,
+    Object? answer = null,
+    Object? answerDetail = null,
+    Object? choices = null,
+    Object? question = null,
   }) {
     return _then(_$SoalModelImpl(
-      jawaban: null == jawaban
-          ? _value.jawaban
-          : jawaban // ignore: cast_nullable_to_non_nullable
+      answer: null == answer
+          ? _value.answer
+          : answer // ignore: cast_nullable_to_non_nullable
               as String,
-      pembahasan: null == pembahasan
-          ? _value._pembahasan
-          : pembahasan // ignore: cast_nullable_to_non_nullable
+      answerDetail: null == answerDetail
+          ? _value._answerDetail
+          : answerDetail // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      pilihan: null == pilihan
-          ? _value._pilihan
-          : pilihan // ignore: cast_nullable_to_non_nullable
+      choices: null == choices
+          ? _value._choices
+          : choices // ignore: cast_nullable_to_non_nullable
               as Map<String, List<String>>,
-      pertanyaan: null == pertanyaan
-          ? _value._pertanyaan
-          : pertanyaan // ignore: cast_nullable_to_non_nullable
+      question: null == question
+          ? _value._question
+          : question // ignore: cast_nullable_to_non_nullable
               as List<String>,
     ));
   }
@@ -138,46 +138,46 @@ class __$$SoalModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$SoalModelImpl implements _SoalModel {
   const _$SoalModelImpl(
-      {required this.jawaban,
-      required final List<String> pembahasan,
-      required final Map<String, List<String>> pilihan,
-      required final List<String> pertanyaan})
-      : _pembahasan = pembahasan,
-        _pilihan = pilihan,
-        _pertanyaan = pertanyaan;
+      {required this.answer,
+      required final List<String> answerDetail,
+      required final Map<String, List<String>> choices,
+      required final List<String> question})
+      : _answerDetail = answerDetail,
+        _choices = choices,
+        _question = question;
 
   factory _$SoalModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$SoalModelImplFromJson(json);
 
   @override
-  final String jawaban;
-  final List<String> _pembahasan;
+  final String answer;
+  final List<String> _answerDetail;
   @override
-  List<String> get pembahasan {
-    if (_pembahasan is EqualUnmodifiableListView) return _pembahasan;
+  List<String> get answerDetail {
+    if (_answerDetail is EqualUnmodifiableListView) return _answerDetail;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_pembahasan);
+    return EqualUnmodifiableListView(_answerDetail);
   }
 
-  final Map<String, List<String>> _pilihan;
+  final Map<String, List<String>> _choices;
   @override
-  Map<String, List<String>> get pilihan {
-    if (_pilihan is EqualUnmodifiableMapView) return _pilihan;
+  Map<String, List<String>> get choices {
+    if (_choices is EqualUnmodifiableMapView) return _choices;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_pilihan);
+    return EqualUnmodifiableMapView(_choices);
   }
 
-  final List<String> _pertanyaan;
+  final List<String> _question;
   @override
-  List<String> get pertanyaan {
-    if (_pertanyaan is EqualUnmodifiableListView) return _pertanyaan;
+  List<String> get question {
+    if (_question is EqualUnmodifiableListView) return _question;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_pertanyaan);
+    return EqualUnmodifiableListView(_question);
   }
 
   @override
   String toString() {
-    return 'SoalModel(jawaban: $jawaban, pembahasan: $pembahasan, pilihan: $pilihan, pertanyaan: $pertanyaan)';
+    return 'SoalModel(answer: $answer, answerDetail: $answerDetail, choices: $choices, question: $question)';
   }
 
   @override
@@ -185,22 +185,21 @@ class _$SoalModelImpl implements _SoalModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SoalModelImpl &&
-            (identical(other.jawaban, jawaban) || other.jawaban == jawaban) &&
+            (identical(other.answer, answer) || other.answer == answer) &&
             const DeepCollectionEquality()
-                .equals(other._pembahasan, _pembahasan) &&
-            const DeepCollectionEquality().equals(other._pilihan, _pilihan) &&
-            const DeepCollectionEquality()
-                .equals(other._pertanyaan, _pertanyaan));
+                .equals(other._answerDetail, _answerDetail) &&
+            const DeepCollectionEquality().equals(other._choices, _choices) &&
+            const DeepCollectionEquality().equals(other._question, _question));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      jawaban,
-      const DeepCollectionEquality().hash(_pembahasan),
-      const DeepCollectionEquality().hash(_pilihan),
-      const DeepCollectionEquality().hash(_pertanyaan));
+      answer,
+      const DeepCollectionEquality().hash(_answerDetail),
+      const DeepCollectionEquality().hash(_choices),
+      const DeepCollectionEquality().hash(_question));
 
   @JsonKey(ignore: true)
   @override
@@ -218,22 +217,22 @@ class _$SoalModelImpl implements _SoalModel {
 
 abstract class _SoalModel implements SoalModel {
   const factory _SoalModel(
-      {required final String jawaban,
-      required final List<String> pembahasan,
-      required final Map<String, List<String>> pilihan,
-      required final List<String> pertanyaan}) = _$SoalModelImpl;
+      {required final String answer,
+      required final List<String> answerDetail,
+      required final Map<String, List<String>> choices,
+      required final List<String> question}) = _$SoalModelImpl;
 
   factory _SoalModel.fromJson(Map<String, dynamic> json) =
       _$SoalModelImpl.fromJson;
 
   @override
-  String get jawaban;
+  String get answer;
   @override
-  List<String> get pembahasan;
+  List<String> get answerDetail;
   @override
-  Map<String, List<String>> get pilihan;
+  Map<String, List<String>> get choices;
   @override
-  List<String> get pertanyaan;
+  List<String> get question;
   @override
   @JsonKey(ignore: true)
   _$$SoalModelImplCopyWith<_$SoalModelImpl> get copyWith =>

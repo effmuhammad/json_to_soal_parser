@@ -8,23 +8,22 @@ part of 'soal_model.dart';
 
 _$SoalModelImpl _$$SoalModelImplFromJson(Map<String, dynamic> json) =>
     _$SoalModelImpl(
-      jawaban: json['jawaban'] as String,
-      pembahasan: (json['pembahasan'] as List<dynamic>)
+      answer: json['answer'] as String,
+      answerDetail: (json['answerDetail'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
-      pilihan: (json['pilihan'] as Map<String, dynamic>).map(
+      choices: (json['choices'] as Map<String, dynamic>).map(
         (k, e) =>
             MapEntry(k, (e as List<dynamic>).map((e) => e as String).toList()),
       ),
-      pertanyaan: (json['pertanyaan'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
+      question:
+          (json['question'] as List<dynamic>).map((e) => e as String).toList(),
     );
 
 Map<String, dynamic> _$$SoalModelImplToJson(_$SoalModelImpl instance) =>
     <String, dynamic>{
-      'jawaban': instance.jawaban,
-      'pembahasan': instance.pembahasan,
-      'pilihan': instance.pilihan,
-      'pertanyaan': instance.pertanyaan,
+      'answer': instance.answer,
+      'answerDetail': instance.answerDetail,
+      'choices': instance.choices,
+      'question': instance.question,
     };
