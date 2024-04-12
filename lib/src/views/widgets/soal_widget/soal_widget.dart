@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:json_to_soal_parser/src/models/soal_model/soal_model.dart';
 import 'package:json_to_soal_parser/src/views/widgets/image_popup.dart';
 
@@ -31,17 +30,76 @@ class _SoalWidgetState extends State<SoalWidget> {
     );
   }
 
-  Widget parseText(String text) {
-    const pattern = r'<img:(.*?)>';
-    final regExp = RegExp(pattern);
-    final matches = regExp.allMatches(text).toList();
+  Widget processText(String text) {
+    const patterns = {
+      r'<b:(.*?)>': FontWeight.bold,
+      r'<u:(.*?)>': TextDecoration.underline,
+      r'<i:(.*?)>': FontStyle.italic,
+      r'<s:(.*?)>': TextDecoration.lineThrough,
+    };
 
-    if (matches.isEmpty) {
-      return Text(text);
-    } else if (matches.length == 1 &&
-        matches[0].start == 0 &&
-        matches[0].end == text.length) {
-      final imageName = matches[0].group(1)!;
+    final widgets = <TextSpan>[];
+    var lastMatchEnd = 0;
+    String lastTextAdded = '';
+
+    for (final entry in patterns.entries) {
+      final regExp = RegExp(entry.key);
+      final matches = regExp.allMatches(text).toList();
+
+      for (final match in matches) {
+        final beforeText = text.substring(lastMatchEnd, match.start);
+        if (beforeText.isNotEmpty) {
+          widgets.add(TextSpan(text: beforeText));
+        }
+
+        final matchedText = match.group(1)!;
+        widgets.add(TextSpan(
+          text: matchedText,
+          style: TextStyle(
+            fontWeight: entry.value == FontWeight.bold ? FontWeight.bold : null,
+            decoration: entry.value is TextDecoration
+                ? entry.value as TextDecoration?
+                : null,
+            fontStyle:
+                entry.value == FontStyle.italic ? FontStyle.italic : null,
+          ),
+        ));
+
+        lastMatchEnd = match.end;
+      }
+
+      final afterText = text.substring(lastMatchEnd);
+      if (afterText.isNotEmpty &&
+          !afterText.contains('<s:') &&
+          !afterText.contains('<b:') &&
+          !afterText.contains('<i:') &&
+          !afterText.contains('<u:') &&
+          lastTextAdded != afterText) {
+        widgets.add(TextSpan(text: afterText));
+        lastTextAdded = afterText;
+      }
+    }
+
+    return RichText(
+      text: TextSpan(
+        style: DefaultTextStyle.of(context).style,
+        children: widgets,
+      ),
+    );
+  }
+
+  Widget parseText(String text) {
+    const imgPattern = r'<img:(.*?)>';
+
+    final regExp = RegExp(imgPattern);
+    final imgMatches = regExp.allMatches(text).toList();
+
+    if (imgMatches.isEmpty) {
+      return processText(text);
+    } else if (imgMatches.length == 1 &&
+        imgMatches[0].start == 0 &&
+        imgMatches[0].end == text.length) {
+      final imageName = imgMatches[0].group(1)!;
       return Center(
           child: GestureDetector(
         onTap: () => showDialog(
@@ -59,7 +117,7 @@ class _SoalWidgetState extends State<SoalWidget> {
       final widgets = <Widget>[];
       var lastMatchEnd = 0;
 
-      for (final match in matches) {
+      for (final match in imgMatches) {
         final beforeImgText = text.substring(lastMatchEnd, match.start);
         if (beforeImgText.isNotEmpty) {
           widgets.add(Text(beforeImgText));
@@ -86,7 +144,7 @@ class _SoalWidgetState extends State<SoalWidget> {
 
       final afterLastImgText = text.substring(lastMatchEnd);
       if (afterLastImgText.isNotEmpty) {
-        widgets.add(Text(afterLastImgText));
+        widgets.add(processText(afterLastImgText));
       }
 
       return Wrap(
@@ -113,7 +171,7 @@ class _SoalWidgetState extends State<SoalWidget> {
                   for (var i = 0; i < widget.soal.question.length; i++)
                     Column(
                       children: [
-                        Text(widget.soal.question[i]),
+                        parseText(widget.soal.question[i]),
                       ],
                     ),
                   const SizedBox(height: 10),
@@ -139,8 +197,8 @@ class _SoalWidgetState extends State<SoalWidget> {
                                                 .elementAt(i)
                                                 .length;
                                         j++)
-                                      Text(widget.soal.choices.values
-                                          .elementAt(i)[j]),
+                                      parseText(widget.soal.choices.values
+                                          .elementAt(i)[j])
                                   ],
                                 ),
                               ],
