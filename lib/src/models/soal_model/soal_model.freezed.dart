@@ -20,6 +20,7 @@ SoalModel _$SoalModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SoalModel {
+  int get id => throw _privateConstructorUsedError;
   String get answer => throw _privateConstructorUsedError;
   List<String> get answerDetail => throw _privateConstructorUsedError;
   Map<String, List<String>> get choices => throw _privateConstructorUsedError;
@@ -37,7 +38,8 @@ abstract class $SoalModelCopyWith<$Res> {
       _$SoalModelCopyWithImpl<$Res, SoalModel>;
   @useResult
   $Res call(
-      {String answer,
+      {int id,
+      String answer,
       List<String> answerDetail,
       Map<String, List<String>> choices,
       List<String> question});
@@ -56,12 +58,17 @@ class _$SoalModelCopyWithImpl<$Res, $Val extends SoalModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? answer = null,
     Object? answerDetail = null,
     Object? choices = null,
     Object? question = null,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       answer: null == answer
           ? _value.answer
           : answer // ignore: cast_nullable_to_non_nullable
@@ -91,7 +98,8 @@ abstract class _$$SoalModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String answer,
+      {int id,
+      String answer,
       List<String> answerDetail,
       Map<String, List<String>> choices,
       List<String> question});
@@ -108,12 +116,17 @@ class __$$SoalModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? answer = null,
     Object? answerDetail = null,
     Object? choices = null,
     Object? question = null,
   }) {
     return _then(_$SoalModelImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       answer: null == answer
           ? _value.answer
           : answer // ignore: cast_nullable_to_non_nullable
@@ -138,7 +151,8 @@ class __$$SoalModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$SoalModelImpl implements _SoalModel {
   const _$SoalModelImpl(
-      {required this.answer,
+      {required this.id,
+      required this.answer,
       required final List<String> answerDetail,
       required final Map<String, List<String>> choices,
       required final List<String> question})
@@ -149,6 +163,8 @@ class _$SoalModelImpl implements _SoalModel {
   factory _$SoalModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$SoalModelImplFromJson(json);
 
+  @override
+  final int id;
   @override
   final String answer;
   final List<String> _answerDetail;
@@ -177,7 +193,7 @@ class _$SoalModelImpl implements _SoalModel {
 
   @override
   String toString() {
-    return 'SoalModel(answer: $answer, answerDetail: $answerDetail, choices: $choices, question: $question)';
+    return 'SoalModel(id: $id, answer: $answer, answerDetail: $answerDetail, choices: $choices, question: $question)';
   }
 
   @override
@@ -185,6 +201,7 @@ class _$SoalModelImpl implements _SoalModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SoalModelImpl &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.answer, answer) || other.answer == answer) &&
             const DeepCollectionEquality()
                 .equals(other._answerDetail, _answerDetail) &&
@@ -196,6 +213,7 @@ class _$SoalModelImpl implements _SoalModel {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      id,
       answer,
       const DeepCollectionEquality().hash(_answerDetail),
       const DeepCollectionEquality().hash(_choices),
@@ -217,7 +235,8 @@ class _$SoalModelImpl implements _SoalModel {
 
 abstract class _SoalModel implements SoalModel {
   const factory _SoalModel(
-      {required final String answer,
+      {required final int id,
+      required final String answer,
       required final List<String> answerDetail,
       required final Map<String, List<String>> choices,
       required final List<String> question}) = _$SoalModelImpl;
@@ -225,6 +244,8 @@ abstract class _SoalModel implements SoalModel {
   factory _SoalModel.fromJson(Map<String, dynamic> json) =
       _$SoalModelImpl.fromJson;
 
+  @override
+  int get id;
   @override
   String get answer;
   @override

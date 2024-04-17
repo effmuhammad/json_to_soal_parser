@@ -16,17 +16,11 @@ class SoalWidget extends StatefulWidget {
 }
 
 class _SoalWidgetState extends State<SoalWidget> {
-  Widget imageBytesInlineText(String name) {
+  Widget imageBytes(String name, height) {
     return Image.memory(
       widget.files[name]!,
-      height: 40,
-    );
-  }
-
-  Widget imageBytesBig(String name) {
-    return Image.memory(
-      widget.files[name]!,
-      height: 150,
+      fit: BoxFit.contain,
+      height: height,
     );
   }
 
@@ -89,30 +83,13 @@ class _SoalWidgetState extends State<SoalWidget> {
   }
 
   Widget parseText(String text) {
-    const imgPattern = r'<img:(.*?)>';
+    const imgPattern = r'<img:(.*?):(.*?)>';
 
     final regExp = RegExp(imgPattern);
     final imgMatches = regExp.allMatches(text).toList();
 
     if (imgMatches.isEmpty) {
       return processText(text);
-    } else if (imgMatches.length == 1 &&
-        imgMatches[0].start == 0 &&
-        imgMatches[0].end == text.length) {
-      final imageName = imgMatches[0].group(1)!;
-      return Center(
-          child: GestureDetector(
-        onTap: () => showDialog(
-          context: context,
-          builder: (context) => ImagePopup(
-            image: widget.files[imageName]!,
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: imageBytesBig(imageName),
-        ),
-      ));
     } else {
       final widgets = <Widget>[];
       var lastMatchEnd = 0;
@@ -124,6 +101,7 @@ class _SoalWidgetState extends State<SoalWidget> {
         }
 
         final imageName = match.group(1)!;
+        final imageHeight = double.parse(match.group(2)!);
         widgets.add(
           GestureDetector(
             onTap: () => showDialog(
@@ -134,7 +112,8 @@ class _SoalWidgetState extends State<SoalWidget> {
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 5),
-              child: imageBytesInlineText(imageName),
+              child: imageBytes(
+                  imageName, imageHeight), // Use the imageHeight here
             ),
           ),
         );
@@ -161,7 +140,7 @@ class _SoalWidgetState extends State<SoalWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             widget.nomor != null
-                ? Text('${widget.nomor.toString()}.')
+                ? Text('${widget.soal.id.toString()}.')
                 : const SizedBox(),
             const SizedBox(width: 10),
             Expanded(

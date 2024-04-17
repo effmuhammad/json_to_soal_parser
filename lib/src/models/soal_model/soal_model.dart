@@ -7,6 +7,7 @@ part 'soal_model.g.dart';
 @freezed
 class SoalModel with _$SoalModel {
   const factory SoalModel({
+    required int id,
     required String answer,
     required List<String> answerDetail,
     required Map<String, List<String>> choices,

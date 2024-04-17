@@ -8,6 +8,7 @@ part of 'soal_model.dart';
 
 _$SoalModelImpl _$$SoalModelImplFromJson(Map<String, dynamic> json) =>
     _$SoalModelImpl(
+      id: json['id'] as int,
       answer: json['answer'] as String,
       answerDetail: (json['answerDetail'] as List<dynamic>)
           .map((e) => e as String)
@@ -22,6 +23,7 @@ _$SoalModelImpl _$$SoalModelImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$SoalModelImplToJson(_$SoalModelImpl instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'answer': instance.answer,
       'answerDetail': instance.answerDetail,
       'choices': instance.choices,
