@@ -14,6 +14,23 @@ class SoalModel with _$SoalModel {
     required List<String> question,
   }) = _SoalModel;
 
-  factory SoalModel.fromJson(Map<String, Object?> json) =>
-      _$SoalModelFromJson(json);
+  factory SoalModel.fromJson(Map<String, Object?> json) {
+    if (json['answerDetail'] is! List) {
+      json['answerDetail'] = [json['answerDetail']];
+    }
+
+    if (json['question'] is! List) {
+      json['question'] = [json['question']];
+    }
+
+    json['choices'] =
+        (json['choices'] as Map<String, dynamic>).map((key, value) {
+      if (value is! List) {
+        return MapEntry(key, [value]);
+      }
+      return MapEntry(key, value);
+    });
+
+    return _$SoalModelFromJson(json);
+  }
 }

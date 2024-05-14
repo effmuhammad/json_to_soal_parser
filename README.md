@@ -1,13 +1,12 @@
 # json_to_soal_parser
 
-A new Flutter project.
 
 <b:text>  :  Bold
 <u:text>  :  Underline
 <i:text>  :  Italic
 <s:text>  :  Strikethrough
-<img:path_to_your_image.jpg>
-<img:https://example.com/path_to_your_image.jpg>
+<img:path_to_your_image.jpg:size>
+<img:https://example.com/path_to_your_image.jpg:50>
 
 
 

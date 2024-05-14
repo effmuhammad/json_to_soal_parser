@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:developer';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:json_text_field/json_text_field.dart';
 import 'package:json_to_soal_parser/src/models/soal_model/soal_model.dart';
 import 'package:json_to_soal_parser/src/viewmodel/soal_viewmodel.dart';
@@ -52,11 +51,11 @@ class _HomeViewState extends State<HomeView> {
       for (FileSystemEntity file in files) {
         if (file is File) {
           Uint8List bytes = await file.readAsBytes();
-          print('File: ${file.path}, Bytes: $bytes');
+          log('File: ${file.path}, Bytes: $bytes');
         }
       }
     } else {
-      print('Directory does not exist');
+      log('Directory does not exist');
     }
   }
 
@@ -69,14 +68,12 @@ class _HomeViewState extends State<HomeView> {
     try {
       var jsonObject = jsonDecode(jsonString);
       if (jsonObject is List) {
-        debugPrint('jsonObject is List');
         final soalList = SoalViewModel.fromJsonList(
             jsonObject.map((e) => e as Map<String, dynamic>).toList());
         return Column(
           children: soalList.asMap().entries.map((e) {
             int index = e.key;
             SoalModel soal = e.value;
-            // Now you can use both index and soal
             return SoalWidget(nomor: index + 1, soal: soal, files: files);
           }).toList(),
         );
@@ -94,7 +91,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget get jsonInput => JsonTextField(
-        onError: (error) => debugPrint(error),
+        onError: (error) => log(error.toString()),
         showErrorMessage: false,
         controller: jsonController,
         isFormatting: isFormating,
