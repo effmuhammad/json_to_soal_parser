@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:developer';
+import 'package:archive/archive_io.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 
@@ -9,6 +10,7 @@ import 'package:json_text_field/json_text_field.dart';
 import 'package:json_to_soal_parser/src/models/soal_model/soal_model.dart';
 import 'package:json_to_soal_parser/src/viewmodel/soal_viewmodel.dart';
 import 'package:json_to_soal_parser/src/views/widgets/soal_widget/soal_widget.dart';
+import 'package:path/path.dart' as p;
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -25,6 +27,8 @@ class _HomeViewState extends State<HomeView> {
   bool isFormating = true;
 
   void pickFile() async {
+    files.clear();
+
     picked = await FilePicker.platform.pickFiles(
       allowMultiple: true,
       allowCompression: false,
@@ -41,6 +45,40 @@ class _HomeViewState extends State<HomeView> {
         jsonController.formatJson(sortJson: true);
         setState(() {});
       }
+    }
+  }
+
+  void pickZip() async {
+    files.clear();
+
+    picked = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      allowCompression: false,
+      type: FileType.custom,
+      allowedExtensions: ['zip'],
+    );
+    if (picked == null) {
+      return;
+    }
+
+    // extract zip
+    final file = picked!.files.first;
+    final extract = ZipDecoder().decodeBytes(file.bytes!);
+
+    for (final ArchiveFile file in extract) {
+      final fileName = p.basename(file.name);
+      files[fileName] = file.content as Uint8List;
+      log('File: $fileName');
+    }
+
+    log('Files: ${files.keys}');
+
+    if (files.containsKey('soal.json')) {
+      String jsonString = utf8.decode(files['soal.json']!);
+      var jsonData = jsonDecode(jsonString);
+      jsonController.text = jsonEncode(jsonData);
+      jsonController.formatJson(sortJson: true);
+      setState(() {});
     }
   }
 
@@ -121,7 +159,7 @@ class _HomeViewState extends State<HomeView> {
           enabledBorder: OutlineInputBorder(
             borderRadius: const BorderRadius.all(Radius.circular(8)),
             borderSide: BorderSide(
-              color: Theme.of(context).colorScheme.surfaceVariant,
+              color: Theme.of(context).colorScheme.surfaceContainerHighest,
             ),
           ),
           filled: true,
@@ -152,9 +190,26 @@ class _HomeViewState extends State<HomeView> {
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   ElevatedButton(
-                      onPressed: pickFile,
-                      child: const Text("Pick Files (json dan gambar)")),
-                  const SizedBox(width: 50),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: pickFile,
+                    child: const Text("Pick Folder Files"),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: pickZip,
+                    child: const Text("Pick ZIP"),
+                  ),
+                  Container(
+                    width: 2,
+                    height: 25,
+                    color: Colors.grey,
+                  ),
                   ElevatedButton(
                     onPressed: () async {
                       final data = await Clipboard.getData('text/plain');
