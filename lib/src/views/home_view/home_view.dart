@@ -13,7 +13,8 @@ import 'package:json_to_soal_parser/src/views/widgets/soal_widget/soal_widget.da
 import 'package:path/path.dart' as p;
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  const HomeView({super.key, this.link});
+  final String? link;
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -168,133 +169,142 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 0),
-        child: Center(
-          child: Column(
-            children: [
-              const Text(
-                'JSON to SOAL Parser',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const Text(
-                'Project bank soal untuk aplikasi mobile milik EffDev Studio',
-                style: TextStyle(fontSize: 14, color: Colors.grey),
-              ),
-              const SizedBox(height: 20),
-              Wrap(
-                spacing: 20,
-                runSpacing: 10,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      foregroundColor: Colors.white,
+    log('Link: ${widget.link}');
+
+    return Title(
+      title: 'JSON to SOAL Parser',
+      color: Colors.black,
+      child: Scaffold(
+          body: SafeArea(
+        child: Padding(
+          padding:
+              const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 0),
+          child: Center(
+            child: Column(
+              children: [
+                const Text(
+                  'JSON to SOAL Parser',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const Text(
+                  'Project bank soal untuk aplikasi mobile milik EffDev Studio',
+                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                ),
+                const SizedBox(height: 20),
+                Wrap(
+                  spacing: 20,
+                  runSpacing: 10,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
+                      ),
+                      onPressed: pickFile,
+                      child: const Text("Pick Folder Files"),
                     ),
-                    onPressed: pickFile,
-                    child: const Text("Pick Folder Files"),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
-                      foregroundColor: Colors.white,
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange,
+                        foregroundColor: Colors.white,
+                      ),
+                      onPressed: pickZip,
+                      child: const Text("Pick ZIP"),
                     ),
-                    onPressed: pickZip,
-                    child: const Text("Pick ZIP"),
-                  ),
-                  Container(
-                    width: 2,
-                    height: 25,
-                    color: Colors.grey,
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      final data = await Clipboard.getData('text/plain');
-                      jsonController.text = data?.text ?? '';
-                      setState(() {});
-                    },
-                    child: const Text('Paste'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      await Clipboard.setData(
-                        ClipboardData(text: jsonController.text),
-                      );
-                    },
-                    child: const Text('Copy'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => jsonController.formatJson(sortJson: true),
-                    child: const Text('Rapihkan'),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.white,
+                    Container(
+                      width: 2,
+                      height: 25,
+                      color: Colors.grey,
                     ),
-                    onPressed: () {
-                      jsonController.text = '';
-                      setState(() {});
-                    },
-                    child: const Text('Reset'),
-                  ),
-                ],
-              ),
-              const Divider(),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 500,
-                        child: Row(
-                          children: [
-                            Expanded(
-                                child: Column(
-                              children: [
-                                Expanded(child: jsonInput),
-                              ],
-                            )),
-                            const SizedBox(width: 20),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                    ElevatedButton(
+                      onPressed: () async {
+                        final data = await Clipboard.getData('text/plain');
+                        jsonController.text = data?.text ?? '';
+                        setState(() {});
+                      },
+                      child: const Text('Paste'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await Clipboard.setData(
+                          ClipboardData(text: jsonController.text),
+                        );
+                      },
+                      child: const Text('Copy'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () =>
+                          jsonController.formatJson(sortJson: true),
+                      child: const Text('Rapihkan'),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        foregroundColor: Colors.white,
+                      ),
+                      onPressed: () {
+                        jsonController.text = '';
+                        setState(() {});
+                      },
+                      child: const Text('Reset'),
+                    ),
+                  ],
+                ),
+                const Divider(),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 500,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                  child: Column(
                                 children: [
-                                  Expanded(
-                                    child: Container(
-                                      padding: const EdgeInsets.all(10),
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(
-                                            color: Colors.grey.shade300,
-                                            width: 2),
-                                      ),
-                                      child: SingleChildScrollView(
-                                        child: generated,
+                                  Expanded(child: jsonInput),
+                                ],
+                              )),
+                              const SizedBox(width: 20),
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        padding: const EdgeInsets.all(10),
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(
+                                              color: Colors.grey.shade300,
+                                              width: 2),
+                                        ),
+                                        child: SingleChildScrollView(
+                                          child: generated,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      const Text('Copyright EffDev Studio, Version 0.0.1'),
-                      const SizedBox(height: 20),
-                    ],
+                        const SizedBox(height: 20),
+                        const Text('Copyright EffDev Studio, Version 0.0.1'),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
-    ));
+      )),
+    );
   }
 }
