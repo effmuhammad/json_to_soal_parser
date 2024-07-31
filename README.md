@@ -1,5 +1,15 @@
 # json_to_soal_parser
 
+## Deployment
+1. Build the web app
+```bash
+flutter build web --web-renderer html
+```
+2. Remove <base href="/"> from index.html
+3. Replace the old files in hosting directory with the new build files
+
+
+## Formatting json
 
 <b:text>  :  Bold
 <u:text>  :  Underline

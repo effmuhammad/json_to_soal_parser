@@ -1,31 +1,68 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:developer';
 import 'package:archive/archive_io.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:json_text_field/json_text_field.dart';
-import 'package:json_to_soal_parser/src/models/soal_model/soal_model.dart';
-import 'package:json_to_soal_parser/src/viewmodel/soal_viewmodel.dart';
-import 'package:json_to_soal_parser/src/views/widgets/soal_widget/soal_widget.dart';
+import 'package:json_to_soal_parser/src/models/question.dart';
+import 'package:json_to_soal_parser/src/viewmodel/fetch_questions.dart';
+import 'package:json_to_soal_parser/src/viewmodel/question_viewmodel.dart';
+import 'package:json_to_soal_parser/src/views/widgets/question_widget.dart';
 import 'package:path/path.dart' as p;
 
-class HomeView extends StatefulWidget {
+class HomeView extends ConsumerStatefulWidget {
   const HomeView({super.key, this.link});
   final String? link;
 
   @override
-  State<HomeView> createState() => _HomeViewState();
+  ConsumerState<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class _HomeViewState extends ConsumerState<HomeView> {
   final jsonController = JsonTextFieldController();
-  final dirController = TextEditingController();
+  final linkController = TextEditingController();
   FilePickerResult? picked;
   Map<String, Uint8List> files = {};
   bool isFormating = true;
+
+  void setJsonData(Map<String, Uint8List> files) {
+    if (files.containsKey('soal.json')) {
+      String jsonString = utf8.decode(files['soal.json']!);
+      var jsonData = jsonDecode(jsonString);
+      jsonController.text = jsonEncode(jsonData);
+      jsonController.formatJson(sortJson: true);
+      setState(() {});
+    }
+  }
+
+  void handleZipByte(Uint8List byteData) {
+    final extract = ZipDecoder().decodeBytes(byteData);
+
+    for (final ArchiveFile file in extract) {
+      final fileName = p.basename(file.name);
+      files[fileName] = file.content as Uint8List;
+      log('File: $fileName');
+    }
+
+    setJsonData(files);
+  }
+
+  void handleLinkInput(String link) async {
+    EasyLoading.show(status: 'Mendownload ZIP...');
+    try {
+      final byteData = await ref.watch(fetchZipProvider(link).future);
+      EasyLoading.dismiss();
+      handleZipByte(byteData);
+    } catch (e) {
+      log(e.toString());
+      EasyLoading.dismiss();
+      EasyLoading.showError('Gagal mendownload ZIP');
+    }
+  }
 
   void pickFile() async {
     files.clear();
@@ -38,14 +75,7 @@ class _HomeViewState extends State<HomeView> {
       for (final file in picked!.files) {
         files[file.name] = file.bytes!;
       }
-
-      if (files.containsKey('soal.json')) {
-        String jsonString = utf8.decode(files['soal.json']!);
-        var jsonData = jsonDecode(jsonString);
-        jsonController.text = jsonEncode(jsonData);
-        jsonController.formatJson(sortJson: true);
-        setState(() {});
-      }
+      setJsonData(files);
     }
   }
 
@@ -62,40 +92,9 @@ class _HomeViewState extends State<HomeView> {
       return;
     }
 
-    // extract zip
     final file = picked!.files.first;
-    final extract = ZipDecoder().decodeBytes(file.bytes!);
 
-    for (final ArchiveFile file in extract) {
-      final fileName = p.basename(file.name);
-      files[fileName] = file.content as Uint8List;
-      log('File: $fileName');
-    }
-
-    log('Files: ${files.keys}');
-
-    if (files.containsKey('soal.json')) {
-      String jsonString = utf8.decode(files['soal.json']!);
-      var jsonData = jsonDecode(jsonString);
-      jsonController.text = jsonEncode(jsonData);
-      jsonController.formatJson(sortJson: true);
-      setState(() {});
-    }
-  }
-
-  void readFilesFromDirectory(String directoryPath) async {
-    final dir = Directory(directoryPath);
-    if (await dir.exists()) {
-      List<FileSystemEntity> files = dir.listSync();
-      for (FileSystemEntity file in files) {
-        if (file is File) {
-          Uint8List bytes = await file.readAsBytes();
-          log('File: ${file.path}, Bytes: $bytes');
-        }
-      }
-    } else {
-      log('Directory does not exist');
-    }
+    handleZipByte(file.bytes!);
   }
 
   Widget get generated {
@@ -112,13 +111,14 @@ class _HomeViewState extends State<HomeView> {
         return Column(
           children: soalList.asMap().entries.map((e) {
             int index = e.key;
-            SoalModel soal = e.value;
-            return SoalWidget(nomor: index + 1, soal: soal, files: files);
+            Question soal = e.value;
+            return QuestionWidget(
+                number: index + 1, question: soal, files: files);
           }).toList(),
         );
       }
-      final soal = SoalModel.fromJson(jsonDecode(jsonString));
-      return SoalWidget(soal: soal, files: files);
+      final soal = Question.fromJson(jsonDecode(jsonString));
+      return QuestionWidget(question: soal, files: files);
     } catch (e) {
       return Text(
         e.toString(),
@@ -168,9 +168,20 @@ class _HomeViewState extends State<HomeView> {
       );
 
   @override
-  Widget build(BuildContext context) {
-    log('Link: ${widget.link}');
+  void initState() {
+    super.initState();
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      log("Link = ${widget.link.toString()}");
+      if (widget.link != null) {
+        linkController.text = widget.link!;
+        handleLinkInput(widget.link!);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Title(
       title: 'JSON to SOAL Parser',
       color: Colors.black,
@@ -191,6 +202,36 @@ class _HomeViewState extends State<HomeView> {
                   style: TextStyle(fontSize: 14, color: Colors.grey),
                 ),
                 const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 800),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            controller: linkController,
+                            decoration: const InputDecoration(
+                              hintText: 'Masukkan link zip',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        FilledButton(
+                          onPressed: () async {
+                            if (linkController.text.isEmpty) {
+                              EasyLoading.showError('Link belum diisi');
+                              return;
+                            }
+                            handleLinkInput(linkController.text);
+                          },
+                          child: const Text('Buka'),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
                 Wrap(
                   spacing: 20,
                   runSpacing: 10,
@@ -279,8 +320,9 @@ class _HomeViewState extends State<HomeView> {
                                           borderRadius:
                                               BorderRadius.circular(10),
                                           border: Border.all(
-                                              color: Colors.grey.shade300,
-                                              width: 2),
+                                            color: Colors.grey.shade300,
+                                            width: 2,
+                                          ),
                                         ),
                                         child: SingleChildScrollView(
                                           child: generated,

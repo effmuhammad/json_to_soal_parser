@@ -1,21 +1,21 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:json_to_soal_parser/src/models/soal_model/soal_model.dart';
+import 'package:json_to_soal_parser/src/models/question.dart';
 import 'package:json_to_soal_parser/src/views/widgets/image_popup.dart';
 
-class SoalWidget extends StatefulWidget {
-  const SoalWidget(
-      {super.key, this.nomor, required this.soal, required this.files});
-  final int? nomor;
-  final SoalModel soal;
+class QuestionWidget extends StatefulWidget {
+  const QuestionWidget(
+      {super.key, this.number, required this.question, required this.files});
+  final int? number;
+  final Question question;
   final Map<String, Uint8List> files;
 
   @override
-  State<SoalWidget> createState() => _SoalWidgetState();
+  State<QuestionWidget> createState() => _QuestionWidgetState();
 }
 
-class _SoalWidgetState extends State<SoalWidget> {
+class _QuestionWidgetState extends State<QuestionWidget> {
   Widget imageBytes(String name, height) {
     return Image.memory(
       widget.files[name]!,
@@ -97,7 +97,11 @@ class _SoalWidgetState extends State<SoalWidget> {
       for (final match in imgMatches) {
         final beforeImgText = text.substring(lastMatchEnd, match.start);
         if (beforeImgText.isNotEmpty) {
-          widgets.add(Text(beforeImgText));
+          widgets.add(
+            Text(
+              beforeImgText,
+            ),
+          );
         }
 
         final imageName = match.group(1)!;
@@ -127,7 +131,9 @@ class _SoalWidgetState extends State<SoalWidget> {
       }
 
       return Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center, children: widgets);
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: widgets,
+      );
     }
   }
 
@@ -139,48 +145,55 @@ class _SoalWidgetState extends State<SoalWidget> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            widget.nomor != null
-                ? Text('${widget.soal.id.toString()}.')
+            widget.number != null
+                ? Text('${widget.question.id.toString()}.')
                 : const SizedBox(),
             const SizedBox(width: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  for (var i = 0; i < widget.soal.question.length; i++)
+                  for (var i = 0; i < widget.question.question.length; i++)
                     Column(
                       children: [
-                        parseText(widget.soal.question[i]),
+                        parseText(widget.question.question[i]),
                       ],
                     ),
                   const SizedBox(height: 10),
-                  for (var i = 0; i < widget.soal.choices.length; i++)
+                  for (var i = 0; i < widget.question.choices.length; i++)
                     Column(
                       children: [
                         Row(
                           children: [
                             Radio(value: 1, groupValue: 2, onChanged: (a) {}),
                             const SizedBox(width: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                    '${widget.soal.choices.keys.elementAt(i)}.'),
-                                const SizedBox(width: 5),
-                                Column(
-                                  children: [
-                                    for (var j = 0;
-                                        j <
-                                            widget.soal.choices.values
-                                                .elementAt(i)
-                                                .length;
-                                        j++)
-                                      parseText(widget.soal.choices.values
-                                          .elementAt(i)[j])
-                                  ],
-                                ),
-                              ],
+                            Expanded(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                      '${widget.question.choices.keys.elementAt(i)}.'),
+                                  const SizedBox(width: 5),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        for (var j = 0;
+                                            j <
+                                                widget.question.choices.values
+                                                    .elementAt(i)
+                                                    .length;
+                                            j++)
+                                          parseText(widget
+                                              .question.choices.values
+                                              .elementAt(i)[j])
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -189,7 +202,7 @@ class _SoalWidgetState extends State<SoalWidget> {
                     ),
                   const SizedBox(height: 10),
                   Text(
-                    'Jawaban: ${widget.soal.answer}',
+                    'Jawaban: ${widget.question.answer}',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -201,8 +214,10 @@ class _SoalWidgetState extends State<SoalWidget> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      for (var i = 0; i < widget.soal.answerDetail.length; i++)
-                        parseText(widget.soal.answerDetail[
+                      for (var i = 0;
+                          i < widget.question.answerDetail.length;
+                          i++)
+                        parseText(widget.question.answerDetail[
                             i]), // Text(widget.soal.answerDetail[i]),
                     ],
                   ),
