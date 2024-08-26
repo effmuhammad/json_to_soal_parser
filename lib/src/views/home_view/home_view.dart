@@ -342,7 +342,9 @@ class _HomeViewState extends ConsumerState<HomeView> {
                           children: [
                             const Text('Copyright EffDev Studio'),
                             FutureBuilder(
-                                future: PackageInfo.fromPlatform(),
+                                future: PackageInfo.fromPlatform(
+                                    baseUrl:
+                                        'https://effdevstudio.web.app/apps/json-to-soal/'),
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
                                     final packageInfo =
