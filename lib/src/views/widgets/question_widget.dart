@@ -17,10 +17,18 @@ class QuestionWidget extends StatefulWidget {
 
 class _QuestionWidgetState extends State<QuestionWidget> {
   Widget imageBytes(String name, height) {
-    return Image.memory(
-      widget.files[name]!,
-      fit: BoxFit.contain,
-      height: height,
+    if (widget.files[name] != null) {
+      return Image.memory(
+        widget.files[name]!,
+        fit: BoxFit.contain,
+        height: height,
+      );
+    }
+    return Container(
+      padding: const EdgeInsets.all(20),
+      color: Colors.red,
+      height: 100,
+      child: Center(child: Text('$name, Image not found')),
     );
   }
 

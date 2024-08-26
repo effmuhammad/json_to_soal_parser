@@ -12,6 +12,7 @@ import 'package:json_to_soal_parser/src/models/question.dart';
 import 'package:json_to_soal_parser/src/viewmodel/fetch_questions.dart';
 import 'package:json_to_soal_parser/src/viewmodel/question_viewmodel.dart';
 import 'package:json_to_soal_parser/src/views/widgets/question_widget.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as p;
 
 class HomeView extends ConsumerStatefulWidget {
@@ -336,7 +337,23 @@ class _HomeViewState extends ConsumerState<HomeView> {
                           ),
                         ),
                         const SizedBox(height: 20),
-                        const Text('Copyright EffDev Studio, Version 0.0.1'),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text('Copyright EffDev Studio'),
+                            FutureBuilder(
+                                future: PackageInfo.fromPlatform(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    final packageInfo =
+                                        snapshot.data as PackageInfo;
+                                    return Text(
+                                        ', Version ${packageInfo.version}');
+                                  }
+                                  return const SizedBox();
+                                }),
+                          ],
+                        ),
                         const SizedBox(height: 20),
                       ],
                     ),
